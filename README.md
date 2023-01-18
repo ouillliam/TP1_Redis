@@ -15,7 +15,9 @@ Pour chaque utilisateur on a donc une structure qui ressemble à :
       ...
 ```
 L'id de la connexion dans le stream est générée par Redis à partir de la date d'ajout de la connexion.
+
 Pour trouver le nombre de connexions de l'utilisateur dans les dernières 10 minutes, il suffit alors de retirer 10 * 60 = 600 secondes au temps de la tentative de connexion, par exemple tentative de connexion à 1518951480 -> -600 -> 1518950880.
+
 Puis on utilise la commande xrevrange(user_id, +, 1518950880) qui retourne toutes les connexions depuis le temps 1518950880 jusqu'à la dernière connexion du stream. Il ne reste plus qu'a regarder le nombre de connexions retournées.
 
 Quand un utilisateur se connecte pour la première fois, on ajoute son `user_id` à un set de clé `"user"`, ainsi on pourra récupérer tous les `user_id` et parcourir tous les streams de connexion.
